@@ -42,5 +42,6 @@ end
 
 Then /I should see all the movies/ do
   # Make sure that all the movies in the app are visible in the table
-  fail "Unimplemented"
+  n = page.find(:xpath, './/table[@id="movies"]').all(:xpath, '//tr').count - 1
+  n.should == Movie.count
 end
