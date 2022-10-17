@@ -18,7 +18,18 @@ end
 Then /I should see "(.*)" before "(.*)"/ do |e1, e2|
   #  ensure that that e1 occurs before e2.
   #  page.body is the entire content of the page as a string.
-  fail "Unimplemented"
+  n1 = 0 # index position of e1
+  n2 = 0 # index position of e2
+  td = page.find(:xpath, './/table[@id="movies"]').all(:xpath, '//td')
+  td.each_with_index do |item,index|
+    if item.text(:all) == e1
+      n1 = index # set index of e1 to n1
+    end
+    if item.text(:all) == e2
+      n2 = index # set index of e2 to n2
+    end
+  end
+  n1.should < n2 # should find e1 before e2
 end
 
 # Make it easier to express checking or unchecking several boxes at once
