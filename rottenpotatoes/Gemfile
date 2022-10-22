@@ -1,4 +1,4 @@
-source 'https://rubygems.org'
+﻿source 'https://rubygems.org'
 
 ruby '2.6.3'
 gem 'rails', '4.2.10'
@@ -12,6 +12,12 @@ gem 'haml'
 gem 'protected_attributes'
 
 group :development, :test do
+  gem 'figaro'
+  gem 'devise'
+  gem 'omniauth-google-oauth2'
+  gem 'omniauth-rails_csrf_protection'
+  gem 'omniauth'
+
   gem 'sqlite3'
   gem 'byebug'
   gem 'database_cleaner'

@@ -1,14 +1,17 @@
 -#  This file is app/views/movies/index.html.haml
 %h2 All Movies
 
-= form_tag movies_path, :method => :get, :id => 'ratings_form' do
+= form_tag movies_path,style: 'display: flex;align-items:center;margin-bottom:25px' ,:method => :get, :id => 'ratings_form' do
   = hidden_field_tag "title_sort", true if @title_header
   = hidden_field_tag ":release_date_sort", true if @date_header
   Include:
   - @all_ratings.each do |rating|
     = rating
-    = check_box_tag "ratings[#{rating}]", 1, @selected_ratings.include?(rating), :id => "ratings_#{rating}"
+    = check_box_tag "ratings[#{rating}]", 1, @selected_ratings.include?(rating), :id => "ratings_#{rating}",style: "margin-right:10px"
   = submit_tag 'Refresh', :id => 'ratings_submit', :class => 'btn btn-primary'
+  %div{style: 'float:right;width:auto;margin-left:auto;'}
+    = link_to "Log out", destroy_moviegoer_session_path, :method => :delete 
+    = image_tag(current_moviegoer.avatar_url,:alt => "profile_icon")
 
 %table#movies.table.table-striped.col-md-12
   %thead
@@ -24,7 +27,7 @@
         %td= movie.rating
         %td= movie.release_date
         %td= link_to "More about #{movie.title}", movie_path(movie)
-
+        
 = link_to 'Add new movie', new_movie_path
 
 %h3 Search TMDb for a movie
