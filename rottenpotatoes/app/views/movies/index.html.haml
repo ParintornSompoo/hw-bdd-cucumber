@@ -9,9 +9,10 @@
     = rating
     = check_box_tag "ratings[#{rating}]", 1, @selected_ratings.include?(rating), :id => "ratings_#{rating}",style: "margin-right:10px"
   = submit_tag 'Refresh', :id => 'ratings_submit', :class => 'btn btn-primary'
-  %div{style: 'float:right;width:auto;margin-left:auto;'}
-    = link_to "Log out", destroy_moviegoer_session_path, :method => :delete 
-    = image_tag(current_moviegoer.avatar_url,:alt => "profile_icon")
+  - if current_moviegoer
+    %div{style: 'float:right;width:auto;margin-left:auto;'}
+      = link_to "Log out", destroy_moviegoer_session_path, :method => :delete 
+      = image_tag(current_moviegoer.avatar_url,:alt => "profile_icon")
 
 %table#movies.table.table-striped.col-md-12
   %thead
