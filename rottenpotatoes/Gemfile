@@ -12,13 +12,30 @@ gem 'haml'
 gem 'protected_attributes'
 
 group :development, :test do
+  gem 'sqlite3'
+  # gem 'figaro'
+  # gem 'devise'
+  # gem 'omniauth-google-oauth2'
+  # gem 'omniauth-rails_csrf_protection'
+  # gem 'omniauth'
+  # gem 'byebug'
+  # gem 'database_cleaner'
+  # gem 'capybara'
+  # gem 'launchy'
+  # gem 'rspec-rails'
+  # gem 'pry'
+  # gem 'pry-byebug'
+  # gem 'cucumber-rails' 
+  # gem 'cucumber-rails-training-wheels'
+end
+
+group :production do
+  gem 'pg', '~> 0.20'
   gem 'figaro'
   gem 'devise'
   gem 'omniauth-google-oauth2'
   gem 'omniauth-rails_csrf_protection'
   gem 'omniauth'
-
-  gem 'sqlite3'
   gem 'byebug'
   gem 'database_cleaner'
   gem 'capybara'
@@ -28,8 +45,4 @@ group :development, :test do
   gem 'pry-byebug'
   gem 'cucumber-rails' 
   gem 'cucumber-rails-training-wheels'
-end
-
-group :production do
-  gem 'pg'
 end
