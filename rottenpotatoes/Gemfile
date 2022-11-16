@@ -17,7 +17,7 @@ group :development, :test do
   gem 'omniauth-google-oauth2'
   gem 'omniauth-rails_csrf_protection'
   gem 'omniauth'
-
+  gem 'reek'
   gem 'sqlite3'
   gem 'byebug'
   gem 'database_cleaner'

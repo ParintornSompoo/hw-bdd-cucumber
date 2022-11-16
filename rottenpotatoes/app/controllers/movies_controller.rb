@@ -2,14 +2,17 @@ require 'uri'
 require 'net/http'
 require 'json'
 
+# MoviesController is responsible for feature associate with movie data
 class MoviesController < ApplicationController
-
+  
+  # Display movie data via movieID params
   def show
     id = params[:id] # retrieve movie ID from URI route
     @movie = Movie.find(id) # look up movie by unique ID
     # will render app/views/movies/show.<extension> by default
   end
 
+  # Display index page with movies data table with checkbox feature
   def index
     sort = params[:sort] || session[:sort]
     case sort
@@ -18,12 +21,12 @@ class MoviesController < ApplicationController
     when 'release_date'
       ordering,@date_header = {:release_date => :asc}, 'bg-warning hilite'
     end
-    @all_ratings = Movie.all_ratings
-    @selected_ratings = params[:ratings] || session[:ratings] || {}
+    # @all_ratings = Movie.all_ratings
+    @selected_ratings = params[:ratings] || session[:ratings] || Hash[Movie.all_ratings.map {|rating| [rating, rating]}]
 
-    if @selected_ratings == {}
-      @selected_ratings = Hash[@all_ratings.map {|rating| [rating, rating]}]
-    end
+    # if @selected_ratings == {}
+    #   @selected_ratings = Hash[@all_ratings.map {|rating| [rating, rating]}]
+    # end
 
     if params[:sort] != session[:sort] or params[:ratings] != session[:ratings]
       session[:sort] = sort
@@ -33,20 +36,24 @@ class MoviesController < ApplicationController
     @movies = Movie.where(rating: @selected_ratings.keys).order(ordering)
   end
 
+  # Display new template
   def new
     # default: render 'new' template
   end
 
+  # Create data to Movie table
   def create
     @movie = Movie.create!(params[:movie])
     flash[:notice] = "#{@movie.title} was successfully created."
     redirect_to movies_path
   end
 
+  # Get movie data via movie id
   def edit
     @movie = Movie.find params[:id]
   end
 
+  # Update movie data specify via movie id
   def update
     @movie = Movie.find params[:id]
     @movie.update_attributes!(params[:movie])
@@ -54,6 +61,7 @@ class MoviesController < ApplicationController
     redirect_to movie_path(@movie)
   end
 
+  # Delete movie row via movie id
   def destroy
     @movie = Movie.find(params[:id])
     @movie.destroy
@@ -61,18 +69,19 @@ class MoviesController < ApplicationController
     redirect_to movies_path
   end
 
+  # Get movie data via title through TMDb api
   def search_tmdb
     title = params[:search_terms][:title]
     api_key = "fbc366092c54ff98967f908e634acd23"
     uri = URI("https://api.themoviedb.org/3/search/movie?api_key=#{api_key}&language=en-US&query=#{title}&page=1&include_adult=false")
     res = Net::HTTP.get_response(uri)
-    data = JSON.parse(res.body)
-    if data["results"].length() == 0 #Sad path (no result found)
+    results = JSON.parse(res.body)['results']
+    if results.length() == 0 #Sad path (no result found)
       flash[:notice] = "'Movie That Does Not Exist' was not found in TMDb."
       redirect_to movies_path
       return
     else
-      item = data["results"][0] #first result
+      item = results[0] #first result
       @movies = {
         "title" => item["title"],
         "release_date" => item["release_date"]
