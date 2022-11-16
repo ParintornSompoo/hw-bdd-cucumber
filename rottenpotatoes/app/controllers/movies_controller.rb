@@ -21,13 +21,7 @@ class MoviesController < ApplicationController
     when 'release_date'
       ordering,@date_header = {:release_date => :asc}, 'bg-warning hilite'
     end
-    # @all_ratings = Movie.all_ratings
     @selected_ratings = params[:ratings] || session[:ratings] || Hash[Movie.all_ratings.map {|rating| [rating, rating]}]
-
-    # if @selected_ratings == {}
-    #   @selected_ratings = Hash[@all_ratings.map {|rating| [rating, rating]}]
-    # end
-
     if params[:sort] != session[:sort] or params[:ratings] != session[:ratings]
       session[:sort] = sort
       session[:ratings] = @selected_ratings
