@@ -63,13 +63,19 @@ class MoviesController < ApplicationController
     redirect_to movies_path
   end
 
+  # Call TMDB API for movie data
+  def tmdb_search_movie(movie_title)
+    api_key = "fbc366092c54ff98967f908e634acd23"
+    uri = URI("https://api.themoviedb.org/3/search/movie?api_key=#{api_key}&language=en-US&query=#{movie_title}&page=1&include_adult=false")
+    res = Net::HTTP.get_response(uri)
+    tmdb_results = JSON.parse(res.body)['results']
+    tmdb_results
+  end
+
   # Get movie data via title through TMDb api
   def search_tmdb
     title = params[:search_terms][:title]
-    api_key = "fbc366092c54ff98967f908e634acd23"
-    uri = URI("https://api.themoviedb.org/3/search/movie?api_key=#{api_key}&language=en-US&query=#{title}&page=1&include_adult=false")
-    res = Net::HTTP.get_response(uri)
-    results = JSON.parse(res.body)['results']
+    results = self.tmdb_search_movie(title)
     if results.length() == 0 #Sad path (no result found)
       flash[:notice] = "'Movie That Does Not Exist' was not found in TMDb."
       redirect_to movies_path
